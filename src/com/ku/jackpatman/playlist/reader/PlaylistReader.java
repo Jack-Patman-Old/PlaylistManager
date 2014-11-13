@@ -1,21 +1,30 @@
 package com.ku.jackpatman.playlist.reader;
 
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+import com.ku.jackpatman.playlist.Track;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistReader
 {
 
-    private final List<Mp3File> tracks;
+    private final List<Track> tracks;
 
     public PlaylistReader()
     {
         tracks = new ArrayList<>();
+    }
+    
+    public void DeleteTrack(File file)
+    {
+        for(Track track: tracks)
+        {
+            if (track.getFile().getPath().equals(file.getPath()))
+            {
+                tracks.remove(track);
+                track.deleteFile();
+            }
+        }
     }
 
     public void LoadFolder(String path)
@@ -27,7 +36,7 @@ public class PlaylistReader
             if (file.isDirectory())
             {
                 LoadFolder(file.toString());
-                System.out.println("Encountered subfolder in selected folder, processing subfolder at "+file.getAbsolutePath());
+                System.out.println("Encountered subfolder in selected folder, processing subfolder at " + file.getAbsolutePath());
             } else
             {
                 String filename = file.toString();
@@ -35,22 +44,13 @@ public class PlaylistReader
 
                 if (extension.equalsIgnoreCase("mp3"))
                 {
-                    try
-                    {
-                        getTracks().add(new Mp3File(file.getAbsolutePath()));
-                    } catch (IOException | UnsupportedTagException | InvalidDataException ex)
-                    {
-                        System.out.println("Exception encountered attempting to read file "
-                                + filename
-                                + "Exception was "
-                                + ex.toString());
-                    }
+                    getTracks().add(new Track(file));
                 }
             }
         }
     }
 
-    public List<Mp3File> getTracks()
+    public List<Track> getTracks()
     {
         return tracks;
     }

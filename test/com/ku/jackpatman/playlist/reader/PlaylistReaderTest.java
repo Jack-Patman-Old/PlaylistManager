@@ -1,6 +1,6 @@
 package com.ku.jackpatman.playlist.reader;
 
-import com.mpatric.mp3agic.Mp3File;
+import com.ku.jackpatman.playlist.Track;
 import java.util.List;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -9,7 +9,6 @@ public class PlaylistReaderTest
 {
 
     //TODO: Test files path will needed to be altered prior to sumittal
-
     final String testDir = "C:\\Users\\Jack\\Downloads\\test-data\\test-data\\";
 
     @Test
@@ -19,7 +18,7 @@ public class PlaylistReaderTest
         PlaylistReader instance = new PlaylistReader();
         instance.LoadFolder(directory);
 
-        List<Mp3File> tracks = instance.getTracks();
+        List<Track> tracks = instance.getTracks();
         Assert.assertEquals(9, tracks.size());
     }
 
@@ -30,15 +29,15 @@ public class PlaylistReaderTest
         PlaylistReader instance = new PlaylistReader();
         instance.LoadFolder(directory);
 
-        List<Mp3File> tracks = instance.getTracks();
+        List<Track> tracks = instance.getTracks();
 
-        Assert.assertEquals(365, tracks.get(0).getLengthInSeconds());
-        Assert.assertEquals("After Many Days", tracks.get(0).getId3v2Tag().getAlbum());
-        Assert.assertEquals("Cannibal Eyes", tracks.get(0).getId3v2Tag().getTitle());
-        Assert.assertEquals("1", tracks.get(0).getId3v2Tag().getTrack());
-
+        Assert.assertEquals("Cannibal Eyes.mp3", tracks.get(0).getFile().getName());
+        Assert.assertEquals(365, tracks.get(0).getTrackFile().getLengthInSeconds());
+        Assert.assertEquals("After Many Days", tracks.get(0).getTrackFile().getId3v2Tag().getAlbum());
+        Assert.assertEquals("Cannibal Eyes", tracks.get(0).getTrackFile().getId3v2Tag().getTitle());
+        Assert.assertEquals("1", tracks.get(0).getTrackFile().getId3v2Tag().getTrack());
         Assert.assertEquals("Free download from http://www.last.fm/music/After+Many+Days and http://MP3.com"
-                           , tracks.get(0).getId3v2Tag().getComment());
+                           , tracks.get(0).getTrackFile().getId3v2Tag().getComment());
 
     }
 }
