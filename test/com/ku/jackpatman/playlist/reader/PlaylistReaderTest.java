@@ -16,9 +16,9 @@ public class PlaylistReaderTest
     {
         String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
-        instance.LoadFolder(directory);
+        instance.LoadPlaylist(directory);
 
-        List<Track> tracks = instance.getTracks();
+        List<Track> tracks = instance.getPlaylist().getTracks();
         Assert.assertEquals(9, tracks.size());
     }
 
@@ -27,9 +27,9 @@ public class PlaylistReaderTest
     {
         String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
-        instance.LoadFolder(directory);
+        instance.LoadPlaylist(directory);
 
-        List<Track> tracks = instance.getTracks();
+        List<Track> tracks = instance.getPlaylist().getTracks();
 
         Assert.assertEquals("Cannibal Eyes.mp3", tracks.get(0).getFile().getName());
         Assert.assertEquals(365, tracks.get(0).getTrackFile().getLengthInSeconds());

@@ -72,15 +72,23 @@ public class Track
 
     public void deleteFile()
     {
-        this.file.delete();
+       boolean deleted = this.file.delete();
     }
 
     public void SaveChanges()
     {
         try
         {
-            getTrackFile().save(this.file.getPath());
-        } catch (IOException | NotSupportedException e)
+            String path = this.file.getPath();
+
+            getTrackFile().save(path+".temp");
+            File file = new File(path);
+            file.delete();
+            
+            File newFile = new File(path+".temp");
+            newFile.renameTo(new File(path));
+                
+         } catch (Exception e)
         {
             System.out.println("Exception encountered attempting to save track trackPath " + this.file.getPath()
                     + "exception was " + e.toString());
