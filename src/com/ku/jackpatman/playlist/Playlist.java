@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Playlist
+public class Playlist 
 {
 
     private final List<Track> tracks;
-
-    public Playlist()
+    private final String playlistPath;
+    
+    public Playlist(String playlistPath)
     {
+        this.playlistPath = playlistPath;
         tracks = new ArrayList<>();
     }
 
@@ -71,5 +73,10 @@ public class Playlist
     public void reversePlaylistOrder()
     {
         Collections.reverse(tracks);
+    }
+    
+    public String toString() 
+    {
+        return playlistPath; 
     }
 }

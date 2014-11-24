@@ -12,12 +12,12 @@ public class TrackYearSort implements Comparator<Track>
         String firstYear;
         String secondYear;
         
-        if (o1.getTrackFile().getId3v1Tag() != null && o2.getTrackFile().getId3v1Tag() != null)
+        if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
             firstYear = o1.getTrackFile().getId3v1Tag().getYear();
             secondYear = o2.getTrackFile().getId3v1Tag().getYear();
         }
-        else
+        else 
         {
             firstYear = o1.getTrackFile().getId3v2Tag().getYear();
             secondYear = o2.getTrackFile().getId3v2Tag().getYear();

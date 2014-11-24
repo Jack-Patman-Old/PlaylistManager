@@ -11,7 +11,7 @@ public class TrackAlbumSort implements Comparator<Track>
         String firstAlbum;
         String secondAlbum;
         
-        if (o1.getTrackFile().getId3v1Tag() != null && o2.getTrackFile().getId3v1Tag() != null)
+        if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
             firstAlbum = o1.getTrackFile().getId3v1Tag().getAlbum();
             secondAlbum = o2.getTrackFile().getId3v1Tag().getAlbum();

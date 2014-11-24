@@ -11,7 +11,7 @@ public class TrackNameSort implements Comparator<Track>
         String firstTitle;
         String secondTitle;
         
-        if (o1.getTrackFile().getId3v1Tag() != null && o2.getTrackFile().getId3v1Tag() != null)
+        if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
             firstTitle = o1.getTrackFile().getId3v1Tag().getTitle();
             secondTitle = o2.getTrackFile().getId3v1Tag().getTitle();

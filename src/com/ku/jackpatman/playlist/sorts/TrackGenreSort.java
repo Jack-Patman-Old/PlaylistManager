@@ -12,7 +12,7 @@ public class TrackGenreSort implements Comparator<Track>
         String firstGenre;
         String secondGenre;
 
-        if (o1.getTrackFile().getId3v1Tag() != null && o2.getTrackFile().getId3v1Tag() != null)
+        if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
             firstGenre = o1.getTrackFile().getId3v1Tag().getGenreDescription();
             secondGenre = o2.getTrackFile().getId3v1Tag().getGenreDescription();

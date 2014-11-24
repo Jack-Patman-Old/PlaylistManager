@@ -14,7 +14,7 @@ public class PlaylistTest
         String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
         instance.LoadPlaylist(directory);
-        Playlist playlist = instance.getPlaylist();
+        Playlist playlist = instance.getPlaylists().get(0);
 
         playlist.sortTracksByName();
         
@@ -27,7 +27,7 @@ public class PlaylistTest
         String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
         instance.LoadPlaylist(directory);
-        Playlist playlist = instance.getPlaylist();
+        Playlist playlist = instance.getPlaylists().get(0);
 
         playlist.sortTracksByAlbum();
         
@@ -41,7 +41,7 @@ public class PlaylistTest
         String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
         instance.LoadPlaylist(directory);
-        Playlist playlist = instance.getPlaylist();
+        Playlist playlist = instance.getPlaylists().get(0);
 
         playlist.sortTracksByPath();
         
@@ -51,10 +51,10 @@ public class PlaylistTest
     @Test
     public void testReverseTracklist()
     {
-         String directory = testDir + "collection-A\\";
+        String directory = testDir + "collection-A\\";
         PlaylistReader instance = new PlaylistReader();
         instance.LoadPlaylist(directory);
-        Playlist playlist = instance.getPlaylist();
+        Playlist playlist = instance.getPlaylists().get(0);
 
         playlist.reversePlaylistOrder();
         
