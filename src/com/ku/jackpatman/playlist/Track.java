@@ -26,7 +26,8 @@ public class Track
         try
         {
             trackFile = new Mp3File(file.getAbsolutePath());
-        } catch (IOException | UnsupportedTagException | InvalidDataException ex)
+        } 
+        catch (IOException | UnsupportedTagException | InvalidDataException ex)
         {
             System.out.println("Exception encountered loading MP3 file, exception was" + ex.toString());
         }
@@ -72,7 +73,7 @@ public class Track
 
     public void deleteFile()
     {
-       boolean deleted = this.file.delete();
+       this.file.delete();
     }
 
     public void SaveChanges()
@@ -88,7 +89,8 @@ public class Track
             File newFile = new File(path+".temp");
             newFile.renameTo(new File(path));
                 
-         } catch (Exception e)
+        } 
+        catch (IOException | NotSupportedException e)
         {
             System.out.println("Exception encountered attempting to save track trackPath " + this.file.getPath()
                     + "exception was " + e.toString());
