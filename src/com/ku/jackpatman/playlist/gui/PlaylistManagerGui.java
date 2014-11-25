@@ -60,10 +60,18 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         btnRemovePlaylist = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableTracks = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtSearch = new javax.swing.JTextPane();
+        comboSortBy = new javax.swing.JComboBox();
         jMenuToolbar = new javax.swing.JMenuBar();
         jBtnFile = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
         BtnLoadPlaylist = new javax.swing.JMenuItem();
         BtnMenuRemovePlaylist = new javax.swing.JMenuItem();
+        BtnGeneratePlaylist = new javax.swing.JMenuItem();
+        BtnTrackMenu = new javax.swing.JMenu();
+        BtnAddTrack = new javax.swing.JMenuItem();
+        BtnRemoveTrack = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -119,15 +127,26 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         });
         jScrollPane2.setViewportView(jTableTracks);
 
+        jScrollPane3.setToolTipText("");
+
+        txtSearch.setForeground(new java.awt.Color(204, 204, 204));
+        txtSearch.setText("Search...");
+        jScrollPane3.setViewportView(txtSearch);
+
+        comboSortBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Album", "Title", "Artist", "Genre", "Length", "Year", "Sort By..." }));
+        comboSortBy.setSelectedIndex(6);
+
         jMenuToolbar.setName("TlbrMainMenu"); // NOI18N
 
         jBtnFile.setText("File");
         jBtnFile.setName("BtnFile"); // NOI18N
 
-        BtnLoadPlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenu1.setText("Playlist");
+
+        BtnLoadPlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         BtnLoadPlaylist.setBackground(new java.awt.Color(249, 240, 240));
         BtnLoadPlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music200.png"))); // NOI18N
-        BtnLoadPlaylist.setText("Load Playlist");
+        BtnLoadPlaylist.setText("Load Folder/Playlist");
         BtnLoadPlaylist.setToolTipText("");
         BtnLoadPlaylist.setName("BtnLoad"); // NOI18N
         BtnLoadPlaylist.addActionListener(new java.awt.event.ActionListener()
@@ -137,12 +156,12 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 BtnLoadPlaylistActionPerformed(evt);
             }
         });
-        jBtnFile.add(BtnLoadPlaylist);
+        jMenu1.add(BtnLoadPlaylist);
         BtnLoadPlaylist.getAccessibleContext().setAccessibleName("loadPlaylistBtn");
 
-        BtnMenuRemovePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        BtnMenuRemovePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
         BtnMenuRemovePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music250.png"))); // NOI18N
-        BtnMenuRemovePlaylist.setText("Remove Playlist");
+        BtnMenuRemovePlaylist.setText("Remove Folder/Playlist");
         BtnMenuRemovePlaylist.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -150,11 +169,36 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 BtnMenuRemovePlaylistActionPerformed(evt);
             }
         });
-        jBtnFile.add(BtnMenuRemovePlaylist);
+        jMenu1.add(BtnMenuRemovePlaylist);
+
+        BtnGeneratePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        BtnGeneratePlaylist.setText("Create Playlist");
+        jMenu1.add(BtnGeneratePlaylist);
+
+        jBtnFile.add(jMenu1);
+
+        BtnTrackMenu.setText("Track");
+
+        BtnAddTrack.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        BtnAddTrack.setText("Add Track");
+        BtnTrackMenu.add(BtnAddTrack);
+
+        BtnRemoveTrack.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
+        BtnRemoveTrack.setText("Remove Track");
+        BtnRemoveTrack.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                BtnRemoveTrackActionPerformed(evt);
+            }
+        });
+        BtnTrackMenu.add(BtnRemoveTrack);
+
+        jBtnFile.add(BtnTrackMenu);
 
         jMenuToolbar.add(jBtnFile);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Option");
         jMenuToolbar.add(jMenu2);
 
         setJMenuBar(jMenuToolbar);
@@ -170,20 +214,30 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane3)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAddPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -268,6 +322,11 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         });
             jScrollPane1.setViewportView(jListPlaylists);    }//GEN-LAST:event_BtnMenuRemovePlaylistActionPerformed
 
+    private void BtnRemoveTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnRemoveTrackActionPerformed
+    {//GEN-HEADEREND:event_BtnRemoveTrackActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnRemoveTrackActionPerformed
+
     private void UpdateTable(int playlistIndex)
     {
         Playlist playlist = reader.getPlaylists().get(playlistIndex);
@@ -337,16 +396,24 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem BtnAddTrack;
+    private javax.swing.JMenuItem BtnGeneratePlaylist;
     private javax.swing.JMenuItem BtnLoadPlaylist;
     private javax.swing.JMenuItem BtnMenuRemovePlaylist;
+    private javax.swing.JMenuItem BtnRemoveTrack;
+    private javax.swing.JMenu BtnTrackMenu;
     private javax.swing.JButton btnAddPlaylist;
     private javax.swing.JButton btnRemovePlaylist;
+    private javax.swing.JComboBox comboSortBy;
     private javax.swing.JMenu jBtnFile;
     private javax.swing.JList jListPlaylists;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuToolbar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableTracks;
+    private javax.swing.JTextPane txtSearch;
     // End of variables declaration//GEN-END:variables
 }
