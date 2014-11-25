@@ -67,6 +67,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Playlist Manager");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("MainFrame"); // NOI18N
 
@@ -205,8 +206,6 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         reader.LoadPlaylist(file.getPath());
 
-        add(new JScrollPane(jListPlaylists));
-
         jListPlaylists.setModel(new DefaultListModel()
         {
             Object[] playlist = reader.getPlaylists().toArray();
@@ -302,8 +301,9 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 artist = tag.getArtist();
                 year = tag.getYear();
                 genre = tag.getGenreDescription();
-                float actualLength = tag.getLength()/60;
-                length = String.format("%.2f", actualLength);             
+                double actualLength = track.getTrackFile().getLengthInSeconds()/60.0;
+                DecimalFormat df = new DecimalFormat("#.00");
+                length = df.format(actualLength);             
             }
             
             Object[] row = { album, name, artist, genre, length, year};
