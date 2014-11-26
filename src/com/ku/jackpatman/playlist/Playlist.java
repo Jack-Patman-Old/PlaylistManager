@@ -7,12 +7,16 @@ import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
 import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackPathSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
-import com.mpatric.mp3agic.ID3v1;
-import com.mpatric.mp3agic.ID3v2;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
 
 public class Playlist
 {
@@ -41,6 +45,48 @@ public class Playlist
                 track.deleteFile();
                 break;
             }
+        }
+    }
+
+    public void GeneratePlaylist(File file)
+    {
+        PrintWriter pw = null;
+
+        String ext = FilenameUtils.getExtension(file.getPath());
+        if (!"m3u".equals(ext.toLowerCase()))
+        {
+            file = new File(file.getPath() + ".m3u");
+        }
+
+        try
+        {
+            pw = new PrintWriter(file.getPath());
+            // Opening line, denotes file header
+            pw.println("#EXTM3U");
+
+            for (Track track : tracks)
+            {
+                Map<MetadataType, String> metadata = track.getTrackMetadata();
+                
+                StringBuilder comment = new StringBuilder();
+                // Comment lead to denote track information
+                comment.append("#EXTINF:");
+                comment.append(track.getTrackFile().getLengthInSeconds());
+                comment.append(",");
+                comment.append(metadata.get(MetadataType.ALBUM));
+                comment.append(" - ");
+                comment.append(metadata.get(MetadataType.TITLE));
+                pw.println(comment.toString());
+                pw.println(track.getFile().getPath());
+            }
+        } 
+        catch (IOException ex)
+        {
+            Logger.getLogger(Playlist.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        finally
+        {
+            pw.close();
         }
     }
 
@@ -102,61 +148,33 @@ public class Playlist
 
         for (Track track : tracks)
         {
-            if (track.getTrackFile().hasId3v1Tag())
+            Map<MetadataType, String> metadata = track.getTrackMetadata();
+
+            if (metadata.get(MetadataType.ALBUM) != null && metadata.get(MetadataType.ALBUM).contains(searchValue))
             {
-                ID3v1 trackData = track.getTrackFile().getId3v1Tag();
-                if (trackData.getAlbum() != null && trackData.getAlbum().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getArtist() != null && trackData.getArtist().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getTitle() != null && trackData.getTitle().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getGenreDescription() != null && trackData.getGenreDescription().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getYear() != null && trackData.getYear().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                }
-            } else if (track.getTrackFile().hasId3v2Tag())
-            {
-                ID3v2 trackData = track.getTrackFile().getId3v2Tag();
-                if (trackData.getAlbum() != null && trackData.getAlbum().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getArtist() != null && trackData.getArtist().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getTitle() != null && trackData.getTitle().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getGenreDescription() != null && trackData.getGenreDescription().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                    continue;
-                }
-                if (trackData.getYear() != null && trackData.getYear().toLowerCase().contains(searchValue))
-                {
-                    matches.add(track);
-                }
+                matches.add(track);
+                continue;
             }
+            if (metadata.get(MetadataType.ARTIST) != null && metadata.get(MetadataType.ARTIST).contains(searchValue))
+            {
+                matches.add(track);
+                continue;
+            }
+            if (metadata.get(MetadataType.TITLE) != null && metadata.get(MetadataType.TITLE).contains(searchValue))
+            {
+                matches.add(track);
+                continue;
+            }
+            if (metadata.get(MetadataType.GENRE) != null && metadata.get(MetadataType.GENRE).contains(searchValue))
+            {
+                matches.add(track);
+                continue;
+            }
+            if (metadata.get(MetadataType.YEAR) != null && metadata.get(MetadataType.YEAR).contains(searchValue))
+            {
+                matches.add(track);
+            }
+
         }
 
         return matches;

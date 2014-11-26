@@ -1,5 +1,7 @@
 package com.ku.jackpatman.playlist;
 
+import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Track
 {
@@ -26,8 +30,7 @@ public class Track
         try
         {
             trackFile = new Mp3File(file.getAbsolutePath());
-        } 
-        catch (IOException | UnsupportedTagException | InvalidDataException ex)
+        } catch (IOException | UnsupportedTagException | InvalidDataException ex)
         {
             System.out.println("Exception encountered loading MP3 file, exception was" + ex.toString());
         }
@@ -54,7 +57,7 @@ public class Track
         // Make path before populating it
         File newFile = new File(newDirectory + "\\" + this.file.getName());
         newFile.getParentFile().mkdirs();
-        
+
         try
         {
             String newPath = newDirectory + "\\" + this.file.getName();
@@ -62,9 +65,9 @@ public class Track
             Path path = Paths.get(newPath);
 
             Files.move(originalPath, path);
-            
-            this.file = new File(newPath); 
-                        
+
+            this.file = new File(newPath);
+
         } catch (IOException ex)
         {
             System.out.println("Exception encountered renaming MP3 file, exception was " + ex.toString());
@@ -73,7 +76,7 @@ public class Track
 
     public void deleteFile()
     {
-       this.file.delete();
+        this.file.delete();
     }
 
     public void SaveChanges()
@@ -82,15 +85,14 @@ public class Track
         {
             String path = this.file.getPath();
 
-            getTrackFile().save(path+".temp");
+            getTrackFile().save(path + ".temp");
             File oldFile = new File(path);
             oldFile.delete();
-            
-            File newFile = new File(path+".temp");
+
+            File newFile = new File(path + ".temp");
             newFile.renameTo(new File(path));
-                
-        } 
-        catch (IOException | NotSupportedException e)
+
+        } catch (IOException | NotSupportedException e)
         {
             System.out.println("Exception encountered attempting to save track trackPath " + this.file.getPath()
                     + "exception was " + e.toString());
@@ -115,5 +117,33 @@ public class Track
     public void setFile(File file)
     {
         this.file = file;
+    }
+
+    public Map<MetadataType, String> getTrackMetadata()
+    {
+        Map<MetadataType, String> trackMetadata = new HashMap<>();
+
+        if (trackFile != null)
+        {
+            if (trackFile.hasId3v1Tag())
+            {
+                ID3v1 tag = trackFile.getId3v1Tag();
+                trackMetadata.put(MetadataType.ALBUM, tag.getAlbum());
+                trackMetadata.put(MetadataType.ARTIST, tag.getArtist());
+                trackMetadata.put(MetadataType.TITLE, tag.getTitle());
+                trackMetadata.put(MetadataType.GENRE, tag.getGenreDescription());
+                trackMetadata.put(MetadataType.YEAR, tag.getYear());
+            } else if (trackFile.hasId3v2Tag())
+            {
+                ID3v2 tag = trackFile.getId3v2Tag();
+                trackMetadata.put(MetadataType.ALBUM, tag.getAlbum());
+                trackMetadata.put(MetadataType.ARTIST, tag.getArtist());
+                trackMetadata.put(MetadataType.TITLE, tag.getTitle());
+                trackMetadata.put(MetadataType.GENRE, tag.getGenreDescription());
+                trackMetadata.put(MetadataType.YEAR, tag.getYear());
+            }
+        }
+        
+        return trackMetadata;
     }
 }

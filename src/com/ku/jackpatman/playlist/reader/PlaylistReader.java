@@ -3,8 +3,15 @@ package com.ku.jackpatman.playlist.reader;
 import com.ku.jackpatman.playlist.Playlist;
 import com.ku.jackpatman.playlist.Track;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
 
 public class PlaylistReader
 {
@@ -15,39 +22,62 @@ public class PlaylistReader
     {
         playlists = new ArrayList<>();
     }
-    
+
     public void LoadPlaylist(String path)
     {
-        String extension = path.substring(path.lastIndexOf(".") + 1, path.length());
-        if (extension != null)
+        String ext = FilenameUtils.getExtension(path);
+
+        if (ext != null)
         {
-            if (extension.equalsIgnoreCase("mp3u"))
+            Playlist playlist = new Playlist(path);
+
+            if (ext.equalsIgnoreCase("m3u"))
             {
-              //  LoadPlaylistFile(path);
+                playlists.add(playlist);
+
+                LoadPlaylistFile(path, playlist);
             } else
             {
-                playlists.add(new Playlist(path));
+                playlists.add(playlist);
 
-                LoadFolder(path);
+                LoadFolder(path, playlist);
             }
 
-        }       
+        }
     }
-    
-    private void LoadFolder(String path)
-    {       
+
+    private void LoadPlaylistFile(String path, Playlist playlist)
+    {
+        final char COMMENT_PREFIX = '#';
+        try
+        {
+            List<String> fileContents = Files.readAllLines(Paths.get(path), Charset.defaultCharset());
+            for (String line : fileContents)
+            {
+                if (line.charAt(0) != COMMENT_PREFIX)
+                {
+                    char a = line.charAt(0);
+                    playlist.AddTrack(line);
+                }
+            }
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PlaylistReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void LoadFolder(String path, Playlist playlist)
+    {
         File folder = new File(path);
-        // Get last playlists added - current playlist being loaded.
-        Playlist playlist = playlists.get(playlists.size()-1);
-        
+
         for (File file : folder.listFiles())
         {
             if (file.isDirectory())
             {
-                LoadFolder(file.toString());
+                LoadFolder(file.toString(), playlist);
                 System.out.println("Encountered subfolder in selected folder, processing subfolder at " + file.getAbsolutePath());
-            }
-            else
+            } else
             {
                 String filename = file.toString();
                 String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
@@ -57,7 +87,7 @@ public class PlaylistReader
                     playlist.getTracks().add(new Track(file));
                 }
             }
-        }  
+        }
     }
 
     public List<Playlist> getPlaylists()

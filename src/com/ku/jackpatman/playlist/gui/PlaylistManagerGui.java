@@ -226,7 +226,15 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         jMenu1.add(BtnMenuRemovePlaylist);
 
         BtnGeneratePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        BtnGeneratePlaylist.setText("Create Playlist");
+        BtnGeneratePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/list31.png"))); // NOI18N
+        BtnGeneratePlaylist.setText("Generate Playlist File");
+        BtnGeneratePlaylist.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                BtnGeneratePlaylistActionPerformed(evt);
+            }
+        });
         jMenu1.add(BtnGeneratePlaylist);
 
         jBtnFile.add(jMenu1);
@@ -424,13 +432,13 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     {//GEN-HEADEREND:event_BtnMenuRemovePlaylistActionPerformed
         DefaultListModel listModel = (DefaultListModel) jListPlaylists.getModel();
         int[] selectedIndice = jListPlaylists.getSelectedIndices();
-        
+
         // Counter to keep track of indexes removed due to Arraylist automatically resizing
-        int removalCount =0;
-        
+        int removalCount = 0;
+
         for (int selectedIndex : selectedIndice)
         {
-            reader.getPlaylists().remove(selectedIndex-removalCount);
+            reader.getPlaylists().remove(selectedIndex - removalCount);
             removalCount++;
         }
 
@@ -507,6 +515,19 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             UpdateTable(playlist);
         }
     }//GEN-LAST:event_BtnAddTrackActionPerformed
+
+    private void BtnGeneratePlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnGeneratePlaylistActionPerformed
+    {//GEN-HEADEREND:event_BtnGeneratePlaylistActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(true);
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.showSaveDialog(this);
+
+        File file = fc.getSelectedFile();
+
+        int playlist = jListPlaylists.getSelectedIndex();
+        reader.getPlaylists().get(playlist).GeneratePlaylist(file);
+    }//GEN-LAST:event_BtnGeneratePlaylistActionPerformed
 
     private void UpdateTable(List<Track> searchMatches)
     {
