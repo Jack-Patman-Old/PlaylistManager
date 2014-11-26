@@ -12,10 +12,11 @@ import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -24,6 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -44,42 +47,45 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     {
         initComponents();
 
-        comboSortBy.addActionListener(new ActionListener() {
+        comboSortBy.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
-                if (reader != null)
+                sortTracks(e);
+            }
+        });
+
+        // Clear text field when mouse focuses on it.
+        txtSearch.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                if (txtSearch.getText().equalsIgnoreCase("Search...") && reader != null)
                 {
-                    int selection = comboSortBy.getSelectedIndex();
-                    int playlist = jListPlaylists.getSelectedIndex();
-                    switch (selection)
-                    {
-                        case 0:
-                            reader.getPlaylists().get(playlist).sortTracksByAlbum();
-                            UpdateTable(playlist);
-                            break;
-                        case 1:
-                            reader.getPlaylists().get(playlist).sortTracksByName();
-                            UpdateTable(playlist);
-                            break;
-                        case 2:
-                            reader.getPlaylists().get(playlist).sortByArtist();
-                            UpdateTable(playlist);
-                            break;
-                        case 3:
-                            reader.getPlaylists().get(playlist).sortTracksByGenre();
-                            UpdateTable(playlist);
-                            break;
-                        case 4:
-                            reader.getPlaylists().get(playlist).sortByLength();
-                            break;
-                        case 5:
-                            reader.getPlaylists().get(playlist).sortTracksByYear();
-                            UpdateTable(playlist);
-                            break;
-                        default:
-                            break;
-                    }
+                    txtSearch.setText("");
                 }
+            }
+        });
+
+        //Call appropriate methods to search when search box changes
+        txtSearch.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent e)
+            {
+                searchTracks(e);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                searchTracks(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                searchTracks(e);
             }
         });
 
@@ -280,12 +286,12 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                            .addComponent(comboSortBy))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -297,6 +303,58 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void searchTracks(DocumentEvent evt)
+    {
+        int playlist = jListPlaylists.getSelectedIndex();
+        String searchTerm = txtSearch.getText();
+        if (searchTerm.isEmpty())
+        {
+            // In the event that there is no search term, display all tracks.
+            UpdateTable(playlist);
+        } else
+        {
+            List<Track> matches = reader.getPlaylists().get(playlist).searchTracks(searchTerm);
+            UpdateTable(matches);
+        }
+    }
+
+    private void sortTracks(ActionEvent evt)
+    {
+        if (reader != null)
+        {
+            int selection = comboSortBy.getSelectedIndex();
+            int playlist = jListPlaylists.getSelectedIndex();
+            switch (selection)
+            {
+                case 0:
+                    reader.getPlaylists().get(playlist).sortTracksByAlbum();
+                    UpdateTable(playlist);
+                    break;
+                case 1:
+                    reader.getPlaylists().get(playlist).sortTracksByName();
+                    UpdateTable(playlist);
+                    break;
+                case 2:
+                    reader.getPlaylists().get(playlist).sortTracksByArtist();
+                    UpdateTable(playlist);
+                    break;
+                case 3:
+                    reader.getPlaylists().get(playlist).sortTracksByGenre();
+                    UpdateTable(playlist);
+                    break;
+                case 4:
+                    reader.getPlaylists().get(playlist).sortTracksByLength();
+                    break;
+                case 5:
+                    reader.getPlaylists().get(playlist).sortTracksByYear();
+                    UpdateTable(playlist);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     private void BtnLoadPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnLoadPlaylistActionPerformed
     {//GEN-HEADEREND:event_BtnLoadPlaylistActionPerformed
@@ -379,6 +437,53 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     {//GEN-HEADEREND:event_comboSortByActionPerformed
     }//GEN-LAST:event_comboSortByActionPerformed
 
+    private void UpdateTable(List<Track> searchMatches)
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableTracks.getModel();
+        model.setRowCount(0);
+
+        for (Track track : searchMatches)
+        {
+            String album = null;
+            String name = null;
+            String artist = null;
+            String year = null;
+            String genre = null;
+            String length = null;
+
+            if (track.getTrackFile().hasId3v1Tag())
+            {
+                ID3v1 tag = track.getTrackFile().getId3v1Tag();
+                album = tag.getAlbum();
+                name = tag.getTitle();
+                artist = tag.getArtist();
+                year = tag.getYear();
+                genre = tag.getGenreDescription();
+                // Length cannot be retrieved from ID3V1 tag
+            } else
+            {
+                ID3v2 tag = track.getTrackFile().getId3v2Tag();
+                album = tag.getAlbum();
+                name = tag.getTitle();
+                artist = tag.getArtist();
+                year = tag.getYear();
+                genre = tag.getGenreDescription();
+                double actualLength = track.getTrackFile().getLengthInSeconds() / 60.0;
+                DecimalFormat df = new DecimalFormat("#.00");
+                length = df.format(actualLength);
+            }
+
+            Object[] row =
+            {
+                album, name, artist, genre, length, year
+            };
+            model.addRow(row);
+            model.fireTableDataChanged();
+            jTableTracks.setModel(model);
+        }
+
+    }
+
     private void UpdateTable(int playlistIndex)
     {
         Playlist playlist = reader.getPlaylists().get(playlistIndex);
@@ -421,7 +526,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 album, name, artist, genre, length, year
             };
             model.addRow(row);
-            model.fireTableDataChanged();;
+            model.fireTableDataChanged();
             jTableTracks.setModel(model);
         }
 

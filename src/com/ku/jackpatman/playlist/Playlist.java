@@ -7,6 +7,8 @@ import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
 import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackPathSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
+import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,12 +75,12 @@ public class Playlist
         Collections.sort(tracks, new TrackPathSort());
     }
 
-    public void sortByArtist()
+    public void sortTracksByArtist()
     {
         Collections.sort(tracks, new TrackArtistSort());
     }
     
-    public void sortByLength()
+    public void sortTracksByLength()
     {
         Collections.sort(tracks, new TrackLengthSort());
     }
@@ -87,7 +89,76 @@ public class Playlist
     {
         Collections.reverse(tracks);
     }
+    
+    public List<Track> searchTracks(String searchTerm)
+    {
+        String searchValue = searchTerm.toLowerCase();
+        List<Track> matches = new ArrayList<>();
+        
+        for(Track track: tracks)
+        {
+            if (track.getTrackFile().hasId3v1Tag())
+            {
+                ID3v1 trackData = track.getTrackFile().getId3v1Tag();
+                if (trackData.getAlbum() != null && trackData.getAlbum().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getArtist() != null && trackData.getArtist().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getTitle() != null && trackData.getTitle().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getGenreDescription() != null && trackData.getGenreDescription().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getYear() != null && trackData.getYear().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                }                
+            }
+            else if (track.getTrackFile().hasId3v2Tag())
+            {
+                ID3v2 trackData = track.getTrackFile().getId3v2Tag();
+                if (trackData.getAlbum() != null && trackData.getAlbum().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getArtist() != null && trackData.getArtist().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getTitle() != null && trackData.getTitle().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getGenreDescription()!= null && trackData.getGenreDescription().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                    continue; 
+                }
+                if (trackData.getYear() != null && trackData.getYear().toLowerCase().contains(searchValue))
+                {
+                    matches.add(track);
+                }   
+            }
+        }
+        
+        return matches;
+    }
    
+    @Override
     public String toString() 
     {
         return playlistPath; 

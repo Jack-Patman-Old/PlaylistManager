@@ -83,8 +83,8 @@ public class Track
             String path = this.file.getPath();
 
             getTrackFile().save(path+".temp");
-            File file = new File(path);
-            file.delete();
+            File oldFile = new File(path);
+            oldFile.delete();
             
             File newFile = new File(path+".temp");
             newFile.renameTo(new File(path));

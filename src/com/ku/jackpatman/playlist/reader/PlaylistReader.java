@@ -13,7 +13,7 @@ public class PlaylistReader
 
     public PlaylistReader()
     {
-        playlists = new ArrayList<Playlist>();
+        playlists = new ArrayList<>();
     }
     
     public void LoadPlaylist(String path)
