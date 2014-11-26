@@ -178,6 +178,8 @@
                       <Component id="btnRemoveTrack" min="-2" pref="28" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="BtnSaveChanges" min="-2" pref="27" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jButton1" min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="25" max="32767" attributes="0"/>
@@ -197,12 +199,15 @@
                   <Component id="jScrollPane1" min="-2" pref="450" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnAddPlaylist" max="32767" attributes="0"/>
-                  <Component id="btnRemovePlaylist" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnAddTrack" max="32767" attributes="0"/>
-                  <Component id="btnRemoveTrack" max="32767" attributes="0"/>
-                  <Component id="BtnSaveChanges" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnAddPlaylist" max="32767" attributes="0"/>
+                      <Component id="btnRemovePlaylist" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnAddTrack" max="32767" attributes="0"/>
+                      <Component id="btnRemoveTrack" max="32767" attributes="0"/>
+                      <Component id="BtnSaveChanges" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jButton1" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -235,7 +240,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icons/music200.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Add Playlist/Folder"/>
+        <Property name="toolTipText" type="java.lang.String" value="Add Playlist(s)/Folder(s)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddPlaylistActionPerformed"/>
@@ -246,7 +251,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icons/music250.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Remove Playlist/Folder"/>
+        <Property name="toolTipText" type="java.lang.String" value="Remove Playlist(s)/Folder(s)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemovePlaylistActionPerformed"/>
@@ -266,8 +271,8 @@
                 <Column editable="true" title="Album" type="java.lang.String"/>
                 <Column editable="true" title="Title" type="java.lang.String"/>
                 <Column editable="true" title="Artist" type="java.lang.String"/>
-                <Column editable="true" title="Genre" type="java.lang.String"/>
-                <Column editable="true" title="Length" type="java.lang.String"/>
+                <Column editable="false" title="Genre" type="java.lang.String"/>
+                <Column editable="false" title="Length" type="java.lang.String"/>
                 <Column editable="true" title="Year" type="java.lang.String"/>
               </Table>
             </Property>
@@ -300,6 +305,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icons/itunes.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Add new track(s)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTrackActionPerformed"/>
@@ -310,6 +316,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icons/itunesRemove.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Remove selected track(s)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveTrackActionPerformed"/>
@@ -320,9 +327,21 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icons/floppy1.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Save changes made to track(s)"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnSaveChangesActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/actualize.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Refresh Tracks"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
