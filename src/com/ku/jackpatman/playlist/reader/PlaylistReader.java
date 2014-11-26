@@ -29,15 +29,18 @@ public class PlaylistReader
 
         if (ext != null)
         {
-            Playlist playlist = new Playlist(path);
-
             if (ext.equalsIgnoreCase("m3u"))
             {
+                Playlist playlist = new Playlist(path, true);
+
                 playlists.add(playlist);
 
                 LoadPlaylistFile(path, playlist);
             } else
+
             {
+                Playlist playlist = new Playlist(path, false);
+
                 playlists.add(playlist);
 
                 LoadFolder(path, playlist);
@@ -58,11 +61,13 @@ public class PlaylistReader
                 {
                     char a = line.charAt(0);
                     playlist.AddTrack(line);
+
                 }
             }
         } catch (IOException ex)
         {
-            Logger.getLogger(PlaylistReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlaylistReader.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }

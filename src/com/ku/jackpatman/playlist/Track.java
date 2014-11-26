@@ -143,7 +143,30 @@ public class Track
                 trackMetadata.put(MetadataType.YEAR, tag.getYear());
             }
         }
-        
+
         return trackMetadata;
+    }
+
+    public void setTrackMetadata(Map<MetadataType, String> trackData)
+    {
+        if (trackFile != null)
+        {
+            if (trackFile.hasId3v1Tag())
+            {
+                ID3v1 tag = trackFile.getId3v1Tag();
+                tag.setAlbum(trackData.get(MetadataType.ALBUM));
+                tag.setArtist(trackData.get(MetadataType.ARTIST));
+                tag.setTitle(trackData.get(MetadataType.TITLE));
+                tag.setYear(trackData.get(MetadataType.YEAR));
+            } 
+            else if (trackFile.hasId3v2Tag())
+            {
+                ID3v2 tag = trackFile.getId3v2Tag();
+                tag.setAlbum(trackData.get(MetadataType.ALBUM));
+                tag.setArtist(trackData.get(MetadataType.ARTIST));
+                tag.setTitle(trackData.get(MetadataType.TITLE));
+                tag.setYear(trackData.get(MetadataType.YEAR));
+            }
+        }
     }
 }

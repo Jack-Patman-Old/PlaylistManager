@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,10 +24,13 @@ public class Playlist
 
     private final List<Track> tracks;
     private final String playlistPath;
+    private final boolean isPlaylistFile; 
 
-    public Playlist(String playlistPath)
+    public Playlist(String playlistPath, boolean isPlaylistFile)
     {
         this.playlistPath = playlistPath;
+        this.isPlaylistFile = isPlaylistFile;
+        
         tracks = new ArrayList<>();
     }
 
@@ -46,6 +50,21 @@ public class Playlist
                 break;
             }
         }
+    }
+    
+    public void SaveAllTracks(String[][] data)
+    {
+       for (int i=0; i < data.length; i ++)
+       {
+           Map<MetadataType, String> metadata = new HashMap<>(); 
+           metadata.put(MetadataType.ALBUM, data[i][0]);
+           metadata.put(MetadataType.TITLE, data[i][1]);
+           metadata.put(MetadataType.ARTIST, data[i][2]);
+           metadata.put(MetadataType.YEAR, data[i][5]);
+           
+           tracks.get(i).setTrackMetadata(metadata);
+           tracks.get(i).SaveChanges();
+       } 
     }
 
     public void GeneratePlaylist(File file)
@@ -180,6 +199,16 @@ public class Playlist
         return matches;
     }
 
+    public boolean isPlaylistFile()
+    {
+        return isPlaylistFile; 
+    }
+    
+    public String getPlaylistPath()
+    {
+        return playlistPath; 
+    }
+    
     @Override
     public String toString()
     {
