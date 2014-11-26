@@ -16,7 +16,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -39,19 +41,33 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 {
 
     static PlaylistReader reader;
+    int lastColumnClicked = 0;
 
-    /**
-     * Creates new form PlaylistManagerGui
-     */
     public PlaylistManagerGui()
     {
         initComponents();
 
-        comboSortBy.addActionListener(new ActionListener()
+        /* comboSortBy.addActionListener(new ActionListener()
+         {
+         public void actionPerformed(ActionEvent e)
+         {
+         sortTracks(e);
+         }
+         });*/
+        jTableTracks.getTableHeader().addMouseListener(new MouseAdapter()
         {
-            public void actionPerformed(ActionEvent e)
+            @Override
+            public void mouseClicked(MouseEvent e)
             {
-                sortTracks(e);
+                int col = jTableTracks.columnAtPoint(e.getPoint());
+                if (lastColumnClicked == col)
+                {
+                    sortTracks(col, true);
+                } else
+                {
+                    lastColumnClicked = col;
+                    sortTracks(col, false);
+                }
             }
         });
 
@@ -109,17 +125,18 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         jTableTracks = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtSearch = new javax.swing.JTextPane();
-        comboSortBy = new javax.swing.JComboBox();
+        btnAddTrack = new javax.swing.JButton();
+        btnRemoveTrack = new javax.swing.JToggleButton();
         jMenuToolbar = new javax.swing.JMenuBar();
         jBtnFile = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
         BtnLoadPlaylist = new javax.swing.JMenuItem();
         BtnMenuRemovePlaylist = new javax.swing.JMenuItem();
+        btnSaveChanges = new javax.swing.JMenu();
         BtnGeneratePlaylist = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         BtnTrackMenu = new javax.swing.JMenu();
         BtnAddTrack = new javax.swing.JMenuItem();
         BtnRemoveTrack = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Playlist Manager");
@@ -131,7 +148,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         jListPlaylists.setName("jListPlaylists"); // NOI18N
         jScrollPane1.setViewportView(jListPlaylists);
 
-        btnAddPlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music43.png"))); // NOI18N
+        btnAddPlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music200.png"))); // NOI18N
         btnAddPlaylist.setToolTipText("Add Playlist/Folder");
         btnAddPlaylist.addActionListener(new java.awt.event.ActionListener()
         {
@@ -141,7 +158,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             }
         });
 
-        btnRemovePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music28.png"))); // NOI18N
+        btnRemovePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music250.png"))); // NOI18N
         btnRemovePlaylist.setToolTipText("Remove Playlist/Folder");
         btnRemovePlaylist.addActionListener(new java.awt.event.ActionListener()
         {
@@ -180,13 +197,21 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         txtSearch.setText("Search...");
         jScrollPane3.setViewportView(txtSearch);
 
-        comboSortBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Album", "Title", "Artist", "Genre", "Length", "Year", "Sort By..." }));
-        comboSortBy.setSelectedIndex(6);
-        comboSortBy.addActionListener(new java.awt.event.ActionListener()
+        btnAddTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/itunes.png"))); // NOI18N
+        btnAddTrack.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                comboSortByActionPerformed(evt);
+                btnAddTrackActionPerformed(evt);
+            }
+        });
+
+        btnRemoveTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/itunesRemove.png"))); // NOI18N
+        btnRemoveTrack.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnRemoveTrackActionPerformed(evt);
             }
         });
 
@@ -194,8 +219,6 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         jBtnFile.setText("File");
         jBtnFile.setName("BtnFile"); // NOI18N
-
-        jMenu1.setText("Playlist");
 
         BtnLoadPlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         BtnLoadPlaylist.setBackground(new java.awt.Color(249, 240, 240));
@@ -210,7 +233,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 BtnLoadPlaylistActionPerformed(evt);
             }
         });
-        jMenu1.add(BtnLoadPlaylist);
+        jBtnFile.add(BtnLoadPlaylist);
         BtnLoadPlaylist.getAccessibleContext().setAccessibleName("loadPlaylistBtn");
 
         BtnMenuRemovePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
@@ -223,7 +246,11 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 BtnMenuRemovePlaylistActionPerformed(evt);
             }
         });
-        jMenu1.add(BtnMenuRemovePlaylist);
+        jBtnFile.add(BtnMenuRemovePlaylist);
+
+        jMenuToolbar.add(jBtnFile);
+
+        btnSaveChanges.setText("Playlist");
 
         BtnGeneratePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         BtnGeneratePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/list31.png"))); // NOI18N
@@ -235,9 +262,12 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 BtnGeneratePlaylistActionPerformed(evt);
             }
         });
-        jMenu1.add(BtnGeneratePlaylist);
+        btnSaveChanges.add(BtnGeneratePlaylist);
 
-        jBtnFile.add(jMenu1);
+        jMenuItem1.setText("Save Playlist Changes");
+        btnSaveChanges.add(jMenuItem1);
+
+        jMenuToolbar.add(btnSaveChanges);
 
         BtnTrackMenu.setText("Track");
 
@@ -265,12 +295,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         });
         BtnTrackMenu.add(BtnRemoveTrack);
 
-        jBtnFile.add(BtnTrackMenu);
-
-        jMenuToolbar.add(jBtnFile);
-
-        jMenu2.setText("Option");
-        jMenuToolbar.add(jMenu2);
+        jMenuToolbar.add(BtnTrackMenu);
 
         setJMenuBar(jMenuToolbar);
         jMenuToolbar.getAccessibleContext().setAccessibleName("MenuToolbar");
@@ -282,38 +307,39 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane3)
-                                .addGap(18, 18, 18)
-                                .addComponent(comboSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAddPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAddTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemoveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                            .addComponent(comboSortBy))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("MainMenu");
@@ -336,39 +362,46 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         }
     }
 
-    private void sortTracks(ActionEvent evt)
+    private void sortTracks(int columnIndex, boolean reverseOrder)
     {
         if (reader != null)
         {
-            int selection = comboSortBy.getSelectedIndex();
             int playlist = jListPlaylists.getSelectedIndex();
-            switch (selection)
+            if (reverseOrder)
             {
-                case 0:
-                    reader.getPlaylists().get(playlist).sortTracksByAlbum();
-                    UpdateTable(playlist);
-                    break;
-                case 1:
-                    reader.getPlaylists().get(playlist).sortTracksByName();
-                    UpdateTable(playlist);
-                    break;
-                case 2:
-                    reader.getPlaylists().get(playlist).sortTracksByArtist();
-                    UpdateTable(playlist);
-                    break;
-                case 3:
-                    reader.getPlaylists().get(playlist).sortTracksByGenre();
-                    UpdateTable(playlist);
-                    break;
-                case 4:
-                    reader.getPlaylists().get(playlist).sortTracksByLength();
-                    break;
-                case 5:
-                    reader.getPlaylists().get(playlist).sortTracksByYear();
-                    UpdateTable(playlist);
-                    break;
-                default:
-                    break;
+                reader.getPlaylists().get(playlist).reversePlaylistOrder();
+                UpdateTable(playlist);
+            } else
+            {
+
+                switch (columnIndex)
+                {
+                    case 0:
+                        reader.getPlaylists().get(playlist).sortTracksByAlbum();
+                        UpdateTable(playlist);
+                        break;
+                    case 1:
+                        reader.getPlaylists().get(playlist).sortTracksByName();
+                        UpdateTable(playlist);
+                        break;
+                    case 2:
+                        reader.getPlaylists().get(playlist).sortTracksByArtist();
+                        UpdateTable(playlist);
+                        break;
+                    case 3:
+                        reader.getPlaylists().get(playlist).sortTracksByGenre();
+                        UpdateTable(playlist);
+                        break;
+                    case 4:
+                        reader.getPlaylists().get(playlist).sortTracksByLength();
+                        break;
+                    case 5:
+                        reader.getPlaylists().get(playlist).sortTracksByYear();
+                        UpdateTable(playlist);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -491,10 +524,6 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         }
     }//GEN-LAST:event_BtnRemoveTrackActionPerformed
 
-    private void comboSortByActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_comboSortByActionPerformed
-    {//GEN-HEADEREND:event_comboSortByActionPerformed
-    }//GEN-LAST:event_comboSortByActionPerformed
-
     private void BtnAddTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnAddTrackActionPerformed
     {//GEN-HEADEREND:event_BtnAddTrackActionPerformed
         if (reader != null)
@@ -528,6 +557,16 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         int playlist = jListPlaylists.getSelectedIndex();
         reader.getPlaylists().get(playlist).GeneratePlaylist(file);
     }//GEN-LAST:event_BtnGeneratePlaylistActionPerformed
+
+    private void btnAddTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddTrackActionPerformed
+    {//GEN-HEADEREND:event_btnAddTrackActionPerformed
+        BtnAddTrackActionPerformed(evt);
+    }//GEN-LAST:event_btnAddTrackActionPerformed
+
+    private void btnRemoveTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRemoveTrackActionPerformed
+    {//GEN-HEADEREND:event_btnRemoveTrackActionPerformed
+        BtnRemoveTrackActionPerformed(evt);
+    }//GEN-LAST:event_btnRemoveTrackActionPerformed
 
     private void UpdateTable(List<Track> searchMatches)
     {
@@ -655,12 +694,13 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     private javax.swing.JMenuItem BtnRemoveTrack;
     private javax.swing.JMenu BtnTrackMenu;
     private javax.swing.JButton btnAddPlaylist;
+    private javax.swing.JButton btnAddTrack;
     private javax.swing.JButton btnRemovePlaylist;
-    private javax.swing.JComboBox comboSortBy;
+    private javax.swing.JToggleButton btnRemoveTrack;
+    private javax.swing.JMenu btnSaveChanges;
     private javax.swing.JMenu jBtnFile;
     private javax.swing.JList jListPlaylists;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar jMenuToolbar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
