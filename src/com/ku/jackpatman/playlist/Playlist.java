@@ -1,5 +1,6 @@
 package com.ku.jackpatman.playlist;
 
+import com.ku.jackpatman.playlist.sorts.TrackAlbumSort;
 import com.ku.jackpatman.playlist.sorts.TrackArtistSort;
 import com.ku.jackpatman.playlist.sorts.TrackGenreSort;
 import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
@@ -59,7 +60,7 @@ public class Playlist
 
     public void sortTracksByAlbum()
     {
-        Collections.sort(tracks, new TrackGenreSort());
+        Collections.sort(tracks, new TrackAlbumSort());
     }
 
     public void sortTracksByYear()

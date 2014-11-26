@@ -13,17 +13,17 @@ public class TrackArtistSort implements Comparator<Track>
 
         if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
-            firstArtist = o1.getTrackFile().getId3v1Tag().getArtist().toLowerCase();
-            secondArtist = o2.getTrackFile().getId3v1Tag().getArtist().toLowerCase();
+            firstArtist = o1.getTrackFile().getId3v1Tag().getArtist();
+            secondArtist = o2.getTrackFile().getId3v1Tag().getArtist();
         } else
         {
-            firstArtist = o1.getTrackFile().getId3v2Tag().getArtist().toLowerCase();
-            secondArtist = o2.getTrackFile().getId3v2Tag().getArtist().toLowerCase();
+            firstArtist = o1.getTrackFile().getId3v2Tag().getArtist();
+            secondArtist = o2.getTrackFile().getId3v2Tag().getArtist();
         }
 
       if (firstArtist != null && secondArtist != null)
         {
-            return (firstArtist.compareTo(secondArtist));
+            return (firstArtist.toLowerCase().compareTo(secondArtist.toLowerCase()));
         }
         else
         {

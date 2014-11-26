@@ -176,6 +176,13 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         comboSortBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Album", "Title", "Artist", "Genre", "Length", "Year", "Sort By..." }));
         comboSortBy.setSelectedIndex(6);
+        comboSortBy.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                comboSortByActionPerformed(evt);
+            }
+        });
 
         jMenuToolbar.setName("TlbrMainMenu"); // NOI18N
 
@@ -367,6 +374,10 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     {//GEN-HEADEREND:event_BtnRemoveTrackActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnRemoveTrackActionPerformed
+
+    private void comboSortByActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_comboSortByActionPerformed
+    {//GEN-HEADEREND:event_comboSortByActionPerformed
+    }//GEN-LAST:event_comboSortByActionPerformed
 
     private void UpdateTable(int playlistIndex)
     {

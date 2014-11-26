@@ -14,18 +14,17 @@ public class TrackAlbumSort implements Comparator<Track>
 
         if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
-            firstAlbum = o1.getTrackFile().getId3v1Tag().getAlbum().toLowerCase();
-            secondAlbum = o2.getTrackFile().getId3v1Tag().getAlbum().toLowerCase();
+            firstAlbum = o1.getTrackFile().getId3v1Tag().getAlbum();
+            secondAlbum = o2.getTrackFile().getId3v1Tag().getAlbum();
         } else
         {
-            firstAlbum = o1.getTrackFile().getId3v2Tag().getAlbum().toLowerCase();
-            secondAlbum = o2.getTrackFile().getId3v2Tag().getAlbum().toLowerCase();
+            firstAlbum = o1.getTrackFile().getId3v2Tag().getAlbum();
+            secondAlbum = o2.getTrackFile().getId3v2Tag().getAlbum();
         }
 
         if (firstAlbum != null && secondAlbum != null)
         {
-            return (firstAlbum.compareTo(secondAlbum));
-
+            return (firstAlbum.toLowerCase().compareTo(secondAlbum.toLowerCase()));
         }
         else
         {

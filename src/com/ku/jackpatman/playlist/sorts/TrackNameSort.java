@@ -14,17 +14,17 @@ public class TrackNameSort implements Comparator<Track>
 
         if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
-            firstTitle = o1.getTrackFile().getId3v1Tag().getTitle().toLowerCase();
-            secondTitle = o2.getTrackFile().getId3v1Tag().getTitle().toLowerCase();
+            firstTitle = o1.getTrackFile().getId3v1Tag().getTitle();
+            secondTitle = o2.getTrackFile().getId3v1Tag().getTitle();
         } else
         {
-            firstTitle = o1.getTrackFile().getId3v2Tag().getTitle().toLowerCase();
-            secondTitle = o2.getTrackFile().getId3v2Tag().getTitle().toLowerCase();
+            firstTitle = o1.getTrackFile().getId3v2Tag().getTitle();
+            secondTitle = o2.getTrackFile().getId3v2Tag().getTitle();
         }
 
         if (firstTitle != null && secondTitle != null)
         {
-            return (firstTitle.compareTo(secondTitle));
+            return (firstTitle.toLowerCase().compareTo(secondTitle.toLowerCase()));
 
         } else
         {
