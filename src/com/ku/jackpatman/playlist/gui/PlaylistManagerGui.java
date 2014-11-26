@@ -200,7 +200,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         BtnLoadPlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         BtnLoadPlaylist.setBackground(new java.awt.Color(249, 240, 240));
         BtnLoadPlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music200.png"))); // NOI18N
-        BtnLoadPlaylist.setText("Load Folder/Playlist");
+        BtnLoadPlaylist.setText("Load Folders/Playlists");
         BtnLoadPlaylist.setToolTipText("");
         BtnLoadPlaylist.setName("BtnLoad"); // NOI18N
         BtnLoadPlaylist.addActionListener(new java.awt.event.ActionListener()
@@ -215,7 +215,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         BtnMenuRemovePlaylist.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
         BtnMenuRemovePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/music250.png"))); // NOI18N
-        BtnMenuRemovePlaylist.setText("Remove Folder/Playlist");
+        BtnMenuRemovePlaylist.setText("Remove Folders/Playlists");
         BtnMenuRemovePlaylist.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -234,11 +234,20 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         BtnTrackMenu.setText("Track");
 
         BtnAddTrack.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        BtnAddTrack.setText("Add Track");
+        BtnAddTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/itunes.png"))); // NOI18N
+        BtnAddTrack.setText("Add Tracks");
+        BtnAddTrack.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                BtnAddTrackActionPerformed(evt);
+            }
+        });
         BtnTrackMenu.add(BtnAddTrack);
 
         BtnRemoveTrack.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
-        BtnRemoveTrack.setText("Remove Track");
+        BtnRemoveTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/itunesRemove.png"))); // NOI18N
+        BtnRemoveTrack.setText("Remove Tracks");
         BtnRemoveTrack.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -359,17 +368,22 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     private void BtnLoadPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnLoadPlaylistActionPerformed
     {//GEN-HEADEREND:event_BtnLoadPlaylistActionPerformed
         final JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(true);
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);
 
-        File file = fc.getSelectedFile();
+        File[] files = fc.getSelectedFiles();
 
-        reader.LoadPlaylist(file.getPath());
+        for (File file : files)
+        {
+            reader.LoadPlaylist(file.getPath());
+        }
 
         jListPlaylists.setModel(new DefaultListModel()
         {
             Object[] playlist = reader.getPlaylists().toArray();
 
+            @Override
             public int getSize()
             {
                 return playlist.length;
@@ -408,9 +422,29 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
     private void BtnMenuRemovePlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnMenuRemovePlaylistActionPerformed
     {//GEN-HEADEREND:event_BtnMenuRemovePlaylistActionPerformed
-        DefaultListModel model = (DefaultListModel) jListPlaylists.getModel();
-        int selectedIndex = jListPlaylists.getSelectedIndex();
-        reader.getPlaylists().remove(selectedIndex);
+        DefaultListModel listModel = (DefaultListModel) jListPlaylists.getModel();
+        int[] selectedIndice = jListPlaylists.getSelectedIndices();
+        
+        // Counter to keep track of indexes removed due to Arraylist automatically resizing
+        int removalCount =0;
+        
+        for (int selectedIndex : selectedIndice)
+        {
+            reader.getPlaylists().remove(selectedIndex-removalCount);
+            removalCount++;
+        }
+
+        // Either change to next playlist and display, or clear display.
+        if (reader.getPlaylists().size() > 0)
+        {
+            UpdateTable(reader.getPlaylists().size() - 1);
+        } else
+        {
+            DefaultTableModel tableModel = (DefaultTableModel) jTableTracks.getModel();
+            tableModel.setRowCount(0);
+            tableModel.fireTableDataChanged();
+            jTableTracks.setModel(tableModel);
+        }
 
         jListPlaylists.setModel(new DefaultListModel()
         {
@@ -426,16 +460,53 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 return playlist[i];
             }
         });
+
             jScrollPane1.setViewportView(jListPlaylists);    }//GEN-LAST:event_BtnMenuRemovePlaylistActionPerformed
 
     private void BtnRemoveTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnRemoveTrackActionPerformed
     {//GEN-HEADEREND:event_BtnRemoveTrackActionPerformed
-        // TODO add your handling code here:
+        if (reader != null)
+        {
+            int playlist = jListPlaylists.getSelectedIndex();
+            int tracks[] = jTableTracks.getSelectedRows();
+
+            // Counter to maintain correct removal index, since Arraylist will automatically resize list as items are removed. 
+            int removalCount = 0;
+
+            for (int track : tracks)
+            {
+                reader.getPlaylists().get(playlist).RemoveTrack(track - removalCount);
+                removalCount++;
+            }
+
+            UpdateTable(playlist);
+        }
     }//GEN-LAST:event_BtnRemoveTrackActionPerformed
 
     private void comboSortByActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_comboSortByActionPerformed
     {//GEN-HEADEREND:event_comboSortByActionPerformed
     }//GEN-LAST:event_comboSortByActionPerformed
+
+    private void BtnAddTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnAddTrackActionPerformed
+    {//GEN-HEADEREND:event_BtnAddTrackActionPerformed
+        if (reader != null)
+        {
+            final JFileChooser fc = new JFileChooser();
+            fc.setMultiSelectionEnabled(true);
+            fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            fc.showOpenDialog(this);
+
+            File[] files = fc.getSelectedFiles();
+            int playlist = jListPlaylists.getSelectedIndex();
+
+            for (File file : files)
+            {
+                reader.getPlaylists().get(playlist).AddTrack(file.getPath());
+            }
+
+            UpdateTable(playlist);
+        }
+    }//GEN-LAST:event_BtnAddTrackActionPerformed
 
     private void UpdateTable(List<Track> searchMatches)
     {

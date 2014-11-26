@@ -32,7 +32,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/icons/music200.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Load Folder/Playlist"/>
+                    <Property name="text" type="java.lang.String" value="Load Folders/Playlists"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="name" type="java.lang.String" value="BtnLoad" noResource="true"/>
                   </Properties>
@@ -51,7 +51,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/icons/music250.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Remove Folder/Playlist"/>
+                    <Property name="text" type="java.lang.String" value="Remove Folders/Playlists"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnMenuRemovePlaylistActionPerformed"/>
@@ -77,15 +77,24 @@
                     <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                       <KeyStroke key="Ctrl+T"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Add Track"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/icons/itunes.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Add Tracks"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAddTrackActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="BtnRemoveTrack">
                   <Properties>
                     <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                       <KeyStroke key="Shift+T"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Remove Track"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/icons/itunesRemove.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Remove Tracks"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnRemoveTrackActionPerformed"/>
