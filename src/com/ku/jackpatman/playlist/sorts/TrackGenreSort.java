@@ -14,22 +14,22 @@ public class TrackGenreSort implements Comparator<Track>
 
         if (o1.getTrackFile().hasId3v1Tag() && o2.getTrackFile().hasId3v2Tag())
         {
-            firstGenre = o1.getTrackFile().getId3v1Tag().getGenreDescription();
-            secondGenre = o2.getTrackFile().getId3v1Tag().getGenreDescription();
+            firstGenre = o1.getTrackFile().getId3v1Tag().getGenreDescription().toLowerCase();
+            secondGenre = o2.getTrackFile().getId3v1Tag().getGenreDescription().toLowerCase();
         } else
         {
-            firstGenre = o1.getTrackFile().getId3v2Tag().getGenreDescription();
-            secondGenre = o2.getTrackFile().getId3v2Tag().getGenreDescription();
+            firstGenre = o1.getTrackFile().getId3v2Tag().getGenreDescription().toLowerCase();
+            secondGenre = o2.getTrackFile().getId3v2Tag().getGenreDescription().toLowerCase();
         }
 
-        if (firstGenre != null && secondGenre != null)
+      if (firstGenre != null && secondGenre != null)
         {
             return (firstGenre.compareTo(secondGenre));
         }
         else
         {
             return 0;
-        }
+        }  
 
     }
 }

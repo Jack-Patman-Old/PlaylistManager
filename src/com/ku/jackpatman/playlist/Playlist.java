@@ -1,6 +1,8 @@
 package com.ku.jackpatman.playlist;
 
+import com.ku.jackpatman.playlist.sorts.TrackArtistSort;
 import com.ku.jackpatman.playlist.sorts.TrackGenreSort;
+import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
 import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackPathSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
@@ -70,11 +72,21 @@ public class Playlist
         Collections.sort(tracks, new TrackPathSort());
     }
 
+    public void sortByArtist()
+    {
+        Collections.sort(tracks, new TrackArtistSort());
+    }
+    
+    public void sortByLength()
+    {
+        Collections.sort(tracks, new TrackLengthSort());
+    }
+    
     public void reversePlaylistOrder()
     {
         Collections.reverse(tracks);
     }
-    
+   
     public String toString() 
     {
         return playlistPath; 

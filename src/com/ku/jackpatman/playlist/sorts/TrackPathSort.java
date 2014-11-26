@@ -5,12 +5,19 @@ import java.util.Comparator;
 
 public class TrackPathSort implements Comparator<Track>
 {
-   @Override
+
+    @Override
     public int compare(Track o1, Track o2)
     {
-        String firstPath = o1.getFile().getPath();
-        String secondPath = o2.getFile().getPath();
-            
-        return (firstPath.compareTo(secondPath));
-    }    
+        String firstPath = o1.getFile().getPath().toLowerCase();
+        String secondPath = o2.getFile().getPath().toLowerCase();
+
+        if (firstPath != null && secondPath != null)
+        {
+            return (firstPath.compareTo(secondPath));
+        } else
+        {
+            return 0;
+        }
+    }
 }
