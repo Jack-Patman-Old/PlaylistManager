@@ -57,6 +57,8 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         btnRemoveTrack = new javax.swing.JToggleButton();
         BtnSaveChanges = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        BtnMoveTrackDown = new javax.swing.JButton();
+        BtnMoveTrackUp = new javax.swing.JButton();
         jMenuToolbar = new javax.swing.JMenuBar();
         jBtnFile = new javax.swing.JMenu();
         BtnLoadPlaylist = new javax.swing.JMenuItem();
@@ -173,6 +175,24 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        BtnMoveTrackDown.setText("v");
+        BtnMoveTrackDown.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                BtnMoveTrackDownActionPerformed(evt);
+            }
+        });
+
+        BtnMoveTrackUp.setText("^");
+        BtnMoveTrackUp.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                BtnMoveTrackUpActionPerformed(evt);
             }
         });
 
@@ -293,6 +313,10 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnSaveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnMoveTrackUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnMoveTrackDown)
+                        .addGap(49, 49, 49)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -307,14 +331,18 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemoveTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnSaveChanges, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRemoveTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BtnSaveChanges, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(BtnMoveTrackDown)
+                        .addComponent(BtnMoveTrackUp)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -647,6 +675,32 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         UpdateTable(playlist);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void BtnMoveTrackDownActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnMoveTrackDownActionPerformed
+    {//GEN-HEADEREND:event_BtnMoveTrackDownActionPerformed
+        int selectedRow = jTableTracks.getSelectedRow(); 
+        int playlist = jListPlaylists.getSelectedIndex();
+
+        if (selectedRow < jTableTracks.getRowCount()-1)
+        {
+            reader.getPlaylists().get(playlist).SwapTrackPositions(selectedRow, selectedRow + 1);
+        }
+        
+        UpdateTable(playlist); 
+    }//GEN-LAST:event_BtnMoveTrackDownActionPerformed
+
+    private void BtnMoveTrackUpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnMoveTrackUpActionPerformed
+    {//GEN-HEADEREND:event_BtnMoveTrackUpActionPerformed
+        int selectedRow = jTableTracks.getSelectedRow();
+        int playlist = jListPlaylists.getSelectedIndex();
+
+        if (selectedRow > 0 )
+        {
+            reader.getPlaylists().get(playlist).SwapTrackPositions(selectedRow, selectedRow - 1);
+        }
+        
+        UpdateTable(playlist); 
+    }//GEN-LAST:event_BtnMoveTrackUpActionPerformed
+
     private void UpdateTable(List<Track> searchMatches)
     {
         DefaultTableModel model = (DefaultTableModel) jTableTracks.getModel();
@@ -770,6 +824,8 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     private javax.swing.JMenuItem BtnGeneratePlaylist;
     private javax.swing.JMenuItem BtnLoadPlaylist;
     private javax.swing.JMenuItem BtnMenuRemovePlaylist;
+    private javax.swing.JButton BtnMoveTrackDown;
+    private javax.swing.JButton BtnMoveTrackUp;
     private javax.swing.JMenuItem BtnRemoveTrack;
     private javax.swing.JButton BtnSaveChanges;
     private javax.swing.JMenu BtnTrackMenu;

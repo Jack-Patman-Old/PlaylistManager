@@ -38,7 +38,15 @@ public class Playlist
     {
         tracks.remove(trackNumber);
     }
+    
+    public void SwapTrackPositions(int trackOne, int trackTwo)
+    {
+        Track tempTrack = tracks.get(trackOne);
+        tracks.set(trackOne, tracks.get(trackTwo));
+        tracks.set(trackTwo, tempTrack);
+    }
 
+    
     public void DeleteTrack(File file)
     {
         for (Track track : tracks)
