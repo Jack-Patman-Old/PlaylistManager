@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ku.jackpatman.playlist.gui;
 
 import com.ku.jackpatman.playlist.Playlist;
@@ -16,15 +11,23 @@ import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -39,10 +42,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Jack
- */
 public class PlaylistManagerGui extends javax.swing.JFrame
 {
 
@@ -358,6 +357,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     static PlaylistReader reader;
+    File sessionFile;
     int lastColumnClicked = 0;
 
     public PlaylistManagerGui()
@@ -380,6 +380,20 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 }
             }
         });
+        jListPlaylists.addListSelectionListener(new ListSelectionListener()
+        {
+            @Override
+            public void valueChanged(ListSelectionEvent event)
+            {
+                if (!event.getValueIsAdjusting())
+                {
+                    JList source = (JList) event.getSource();
+                    UpdateTable(source.getSelectedIndex());
+                }
+            }
+        });
+
+        jScrollPane1.setViewportView(jListPlaylists);
 
         // Clear text field when mouse focuses on it.
         txtSearch.addMouseListener(new MouseAdapter()
@@ -429,6 +443,15 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 searchTracks(e);
             }
         });
+
+        try
+        {
+            LoadPreviousSession();
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PlaylistManagerGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        UpdatePlaylistsList();
 
     }
 
@@ -494,18 +517,33 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
     private void BtnLoadPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnLoadPlaylistActionPerformed
     {//GEN-HEADEREND:event_BtnLoadPlaylistActionPerformed
+
         final JFileChooser fc = new JFileChooser();
         fc.setMultiSelectionEnabled(true);
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);
-
         File[] files = fc.getSelectedFiles();
-
         for (File file : files)
         {
             reader.LoadPlaylist(file.getPath());
+            try
+            {
+                AddPlaylistToSession(file.getPath());
+            } catch (IOException ex)
+            {
+                Logger.getLogger(PlaylistManagerGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        UpdatePlaylistsList();
+    }//GEN-LAST:event_BtnLoadPlaylistActionPerformed
 
+    private void btnAddPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddPlaylistActionPerformed
+    {//GEN-HEADEREND:event_btnAddPlaylistActionPerformed
+        BtnLoadPlaylistActionPerformed(evt);
+    }//GEN-LAST:event_btnAddPlaylistActionPerformed
+
+    private void UpdatePlaylistsList()
+    {
         jListPlaylists.setModel(new DefaultListModel()
         {
             Object[] playlist = reader.getPlaylists().toArray();
@@ -521,27 +559,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 return playlist[i];
             }
         });
-
-        jListPlaylists.addListSelectionListener(new ListSelectionListener()
-        {
-            public void valueChanged(ListSelectionEvent event)
-            {
-                if (!event.getValueIsAdjusting())
-                {
-                    JList source = (JList) event.getSource();
-                    UpdateTable(source.getSelectedIndex());
-                }
-            }
-        });
-        jListPlaylists.setSelectedIndex(0);
-        jScrollPane1.setViewportView(jListPlaylists);
-    }//GEN-LAST:event_BtnLoadPlaylistActionPerformed
-
-    private void btnAddPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddPlaylistActionPerformed
-    {//GEN-HEADEREND:event_btnAddPlaylistActionPerformed
-        BtnLoadPlaylistActionPerformed(evt);
-    }//GEN-LAST:event_btnAddPlaylistActionPerformed
-
+    }
     private void btnRemovePlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRemovePlaylistActionPerformed
     {//GEN-HEADEREND:event_btnRemovePlaylistActionPerformed
         BtnMenuRemovePlaylistActionPerformed(evt);
@@ -557,6 +575,14 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
         for (int selectedIndex : selectedIndice)
         {
+            try
+            {
+                RemovePlaylistFromSession(reader.getPlaylists().get(selectedIndex - removalCount).getPlaylistPath());
+            } catch (IOException ex)
+            {
+                Logger.getLogger(PlaylistManagerGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             reader.getPlaylists().remove(selectedIndex - removalCount);
             removalCount++;
         }
@@ -573,7 +599,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             jTableTracks.setModel(tableModel);
         }
 
-
+        UpdatePlaylistsList();
             jScrollPane1.setViewportView(jListPlaylists);    }//GEN-LAST:event_BtnMenuRemovePlaylistActionPerformed
 
     private void BtnRemoveTrackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnRemoveTrackActionPerformed
@@ -684,15 +710,15 @@ public class PlaylistManagerGui extends javax.swing.JFrame
 
     private void BtnMoveTrackDownActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnMoveTrackDownActionPerformed
     {//GEN-HEADEREND:event_BtnMoveTrackDownActionPerformed
-        int selectedRow = jTableTracks.getSelectedRow(); 
+        int selectedRow = jTableTracks.getSelectedRow();
         int playlist = jListPlaylists.getSelectedIndex();
 
-        if (selectedRow < jTableTracks.getRowCount()-1)
+        if (selectedRow < jTableTracks.getRowCount() - 1)
         {
             reader.getPlaylists().get(playlist).SwapTrackPositions(selectedRow, selectedRow + 1);
         }
-        
-        UpdateTable(playlist); 
+
+        UpdateTable(playlist);
     }//GEN-LAST:event_BtnMoveTrackDownActionPerformed
 
     private void BtnMoveTrackUpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnMoveTrackUpActionPerformed
@@ -700,12 +726,12 @@ public class PlaylistManagerGui extends javax.swing.JFrame
         int selectedRow = jTableTracks.getSelectedRow();
         int playlist = jListPlaylists.getSelectedIndex();
 
-        if (selectedRow > 0 )
+        if (selectedRow > 0)
         {
             reader.getPlaylists().get(playlist).SwapTrackPositions(selectedRow, selectedRow - 1);
         }
-        
-        UpdateTable(playlist); 
+
+        UpdateTable(playlist);
     }//GEN-LAST:event_BtnMoveTrackUpActionPerformed
 
     private void UpdateTable(List<Track> searchMatches)
@@ -852,4 +878,62 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     private javax.swing.JTable jTableTracks;
     private javax.swing.JTextPane txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    private void AddPlaylistToSession(String playlistPath) throws IOException
+    {
+        BufferedWriter writer = null;
+        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sessionFile, true), "UTF-8"));
+        writer.write(playlistPath);
+        writer.newLine();
+
+        writer.close();
+    }
+
+    private void RemovePlaylistFromSession(String removedPlaylist) throws IOException
+    {
+        List<String> newFileContents = new ArrayList<>();
+        List<String> fileContents = Files.readAllLines(Paths.get(sessionFile.getPath()), Charset.defaultCharset());
+        for (String line : fileContents)
+        {
+            if (!line.equals(removedPlaylist))
+            {
+                newFileContents.add(line);
+            }
+        }
+
+        if (newFileContents.size() != fileContents.size())
+        {
+            String sessionFilePath = sessionFile.getPath();
+            sessionFile.delete();
+            try (FileWriter writer = new FileWriter(sessionFilePath))
+            {
+                for (String str : newFileContents)
+                {
+                    writer.write(str);
+                }
+            }
+        }
+    }
+
+    private void LoadPreviousSession() throws IOException
+    {
+        String workingDir = System.getProperty("user.dir");
+
+        File tempDir = new File(workingDir + "//temp//");
+        tempDir.mkdir();
+
+        sessionFile = new File(tempDir.getPath() + "\\session.txt");
+        if (sessionFile.exists())
+        {
+            List<String> fileContents = Files.readAllLines(Paths.get(sessionFile.getPath()), Charset.defaultCharset());
+            for (String line : fileContents)
+            {
+                reader.LoadPlaylist(line);
+            }
+
+        } else
+        {
+            sessionFile.createNewFile();
+        }
+    }
 }
