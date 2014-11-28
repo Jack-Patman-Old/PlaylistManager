@@ -1,6 +1,11 @@
 package com.ku.jackpatman.playlist;
 
 import com.ku.jackpatman.playlist.reader.PlaylistReader;
+import com.ku.jackpatman.playlist.sorts.TrackAlbumSort;
+import com.ku.jackpatman.playlist.sorts.TrackArtistSort;
+import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
+import com.ku.jackpatman.playlist.sorts.TrackNameSort;
+import com.ku.jackpatman.playlist.sorts.TrackPathSort;
 import java.util.List;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -18,7 +23,7 @@ public class PlaylistTest
         instance.LoadPlaylist(directory);
         Playlist playlist = instance.getPlaylists().get(0);
 
-        playlist.sortTracksByName();
+        playlist.sortTracks(new TrackNameSort());
 
         Assert.assertEquals("als nous amos", playlist.getTracks().get(0).getTrackFile().getId3v2Tag().getTitle());
     }
@@ -31,7 +36,7 @@ public class PlaylistTest
         instance.LoadPlaylist(directory);
         Playlist playlist = instance.getPlaylists().get(0);
 
-        playlist.sortTracksByAlbum();
+        playlist.sortTracks(new TrackAlbumSort());
 
         Assert.assertEquals("Cannibal Eyes", playlist.getTracks().get(0).getTrackFile().getId3v2Tag().getTitle());
     }
@@ -44,7 +49,7 @@ public class PlaylistTest
         instance.LoadPlaylist(directory);
         Playlist playlist = instance.getPlaylists().get(0);
 
-        playlist.sortTracksByPath();
+        playlist.sortTracks(new TrackPathSort());
 
         Assert.assertEquals(directory + "After Many Days\\Cannibal Eyes.mp3", playlist.getTracks().get(0).getFile().getPath());
     }
@@ -70,7 +75,7 @@ public class PlaylistTest
         instance.LoadPlaylist(directory);
         Playlist playlist = instance.getPlaylists().get(0);
 
-        playlist.sortTracksByArtist();
+        playlist.sortTracks(new TrackArtistSort());
 
         Assert.assertEquals("Cannibal Eyes", playlist.getTracks().get(0).getTrackFile().getId3v2Tag().getTitle());
     }
@@ -83,7 +88,7 @@ public class PlaylistTest
         instance.LoadPlaylist(directory);
         Playlist playlist = instance.getPlaylists().get(0);
 
-        playlist.sortTracksByLength();
+        playlist.sortTracks(new TrackLengthSort());
 
         Assert.assertEquals("la chichonera", playlist.getTracks().get(0).getTrackFile().getId3v2Tag().getTitle());
     }

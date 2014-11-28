@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,40 +128,10 @@ public class Playlist
     {
         return tracks;
     }
-
-    public void sortTracksByName()
+    
+    public void sortTracks(Comparator c)
     {
-        Collections.sort(tracks, new TrackNameSort());
-    }
-
-    public void sortTracksByGenre()
-    {
-        Collections.sort(tracks, new TrackGenreSort());
-    }
-
-    public void sortTracksByAlbum()
-    {
-        Collections.sort(tracks, new TrackAlbumSort());
-    }
-
-    public void sortTracksByYear()
-    {
-        Collections.sort(tracks, new TrackYearSort());
-    }
-
-    public void sortTracksByPath()
-    {
-        Collections.sort(tracks, new TrackPathSort());
-    }
-
-    public void sortTracksByArtist()
-    {
-        Collections.sort(tracks, new TrackArtistSort());
-    }
-
-    public void sortTracksByLength()
-    {
-        Collections.sort(tracks, new TrackLengthSort());
+        Collections.sort(tracks, c);
     }
 
     public void reversePlaylistOrder()

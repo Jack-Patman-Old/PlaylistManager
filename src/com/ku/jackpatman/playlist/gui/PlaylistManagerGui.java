@@ -8,6 +8,12 @@ package com.ku.jackpatman.playlist.gui;
 import com.ku.jackpatman.playlist.Playlist;
 import com.ku.jackpatman.playlist.Track;
 import com.ku.jackpatman.playlist.reader.PlaylistReader;
+import com.ku.jackpatman.playlist.sorts.TrackAlbumSort;
+import com.ku.jackpatman.playlist.sorts.TrackArtistSort;
+import com.ku.jackpatman.playlist.sorts.TrackGenreSort;
+import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
+import com.ku.jackpatman.playlist.sorts.TrackNameSort;
+import com.ku.jackpatman.playlist.sorts.TrackYearSort;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import java.awt.event.ActionEvent;
@@ -456,26 +462,26 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 switch (columnIndex)
                 {
                     case 0:
-                        reader.getPlaylists().get(playlist).sortTracksByAlbum();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackAlbumSort());
                         UpdateTable(playlist);
                         break;
                     case 1:
-                        reader.getPlaylists().get(playlist).sortTracksByName();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackNameSort());
                         UpdateTable(playlist);
                         break;
                     case 2:
-                        reader.getPlaylists().get(playlist).sortTracksByArtist();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackArtistSort());
                         UpdateTable(playlist);
                         break;
                     case 3:
-                        reader.getPlaylists().get(playlist).sortTracksByGenre();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackGenreSort());
                         UpdateTable(playlist);
                         break;
                     case 4:
-                        reader.getPlaylists().get(playlist).sortTracksByLength();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackLengthSort());
                         break;
                     case 5:
-                        reader.getPlaylists().get(playlist).sortTracksByYear();
+                        reader.getPlaylists().get(playlist).sortTracks(new TrackYearSort());
                         UpdateTable(playlist);
                         break;
                     default:
@@ -484,6 +490,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             }
         }
     }
+
 
     private void BtnLoadPlaylistActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_BtnLoadPlaylistActionPerformed
     {//GEN-HEADEREND:event_BtnLoadPlaylistActionPerformed

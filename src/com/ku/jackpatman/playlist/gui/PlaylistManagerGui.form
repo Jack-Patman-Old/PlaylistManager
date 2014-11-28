@@ -182,7 +182,7 @@
                       <Component id="BtnMoveTrackUp" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="BtnMoveTrackDown" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButton1" min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -198,28 +198,24 @@
                   <Group type="102" attributes="0">
                       <Component id="jScrollPane3" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="419" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="450" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnAddPlaylist" max="32767" attributes="0"/>
-                          <Component id="btnRemovePlaylist" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnAddTrack" max="32767" attributes="0"/>
-                          <Component id="btnRemoveTrack" max="32767" attributes="0"/>
-                          <Component id="BtnSaveChanges" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="jButton1" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnAddPlaylist" max="32767" attributes="0"/>
+                      <Component id="btnRemovePlaylist" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnAddTrack" max="32767" attributes="0"/>
+                      <Component id="btnRemoveTrack" max="32767" attributes="0"/>
+                      <Component id="BtnSaveChanges" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="BtnMoveTrackDown" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="BtnMoveTrackUp" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jButton1" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="BtnMoveTrackDown" min="-2" max="-2" attributes="0"/>
+                  <Component id="BtnMoveTrackUp" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="17" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -356,7 +352,10 @@
     </Component>
     <Component class="javax.swing.JButton" name="BtnMoveTrackDown">
       <Properties>
-        <Property name="text" type="java.lang.String" value="v"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/arrow483.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Move Track Down"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnMoveTrackDownActionPerformed"/>
@@ -364,7 +363,10 @@
     </Component>
     <Component class="javax.swing.JButton" name="BtnMoveTrackUp">
       <Properties>
-        <Property name="text" type="java.lang.String" value="^"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/navigate6.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Move Track Up"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnMoveTrackUpActionPerformed"/>
