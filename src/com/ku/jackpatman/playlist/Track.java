@@ -22,7 +22,8 @@ public class Track
 
     private File file;
     private Mp3File trackFile;
-
+    private boolean isFavourite; 
+    
     public Track(File file)
     {
         this.file = file;
@@ -168,5 +169,16 @@ public class Track
                 tag.setYear(trackData.get(MetadataType.YEAR));
             }
         }
+    }
+
+    
+    public boolean isIsFavourite()
+    {
+        return isFavourite;
+    }
+    
+    public void setIsFavourite(boolean isFavourite)
+    {
+        this.isFavourite = isFavourite;
     }
 }

@@ -1,12 +1,5 @@
 package com.ku.jackpatman.playlist;
 
-import com.ku.jackpatman.playlist.sorts.TrackAlbumSort;
-import com.ku.jackpatman.playlist.sorts.TrackArtistSort;
-import com.ku.jackpatman.playlist.sorts.TrackGenreSort;
-import com.ku.jackpatman.playlist.sorts.TrackLengthSort;
-import com.ku.jackpatman.playlist.sorts.TrackNameSort;
-import com.ku.jackpatman.playlist.sorts.TrackPathSort;
-import com.ku.jackpatman.playlist.sorts.TrackYearSort;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
