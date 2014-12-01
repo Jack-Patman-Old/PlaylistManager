@@ -11,6 +11,8 @@ import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -34,12 +36,14 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PlaylistManagerGui extends javax.swing.JFrame
@@ -135,6 +139,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                 return canEdit [columnIndex];
             }
         });
+        jTableTracks.setSelectionForeground(new java.awt.Color(0, 51, 255));
         jScrollPane2.setViewportView(jTableTracks);
 
         jScrollPane3.setToolTipText("");
@@ -183,7 +188,8 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             }
         });
 
-        BtnMoveTrackDown.setText("v");
+        BtnMoveTrackDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrow483.png"))); // NOI18N
+        BtnMoveTrackDown.setToolTipText("Move Track Down");
         BtnMoveTrackDown.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -192,7 +198,8 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             }
         });
 
-        BtnMoveTrackUp.setText("^");
+        BtnMoveTrackUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/navigate6.png"))); // NOI18N
+        BtnMoveTrackUp.setToolTipText("Move Track Up");
         BtnMoveTrackUp.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -321,7 +328,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                         .addComponent(BtnMoveTrackUp)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnMoveTrackDown)
-                        .addGap(49, 49, 49)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -333,22 +340,20 @@ public class PlaylistManagerGui extends javax.swing.JFrame
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAddTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRemoveTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BtnSaveChanges, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(BtnMoveTrackDown)
-                        .addComponent(BtnMoveTrackUp)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnAddPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRemovePlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAddTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRemoveTrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnSaveChanges, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnMoveTrackDown)
+                    .addComponent(BtnMoveTrackUp))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("MainMenu");
@@ -363,7 +368,19 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     public PlaylistManagerGui()
     {
         initComponents();
-
+        jTableTracks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+        {
+            /* Will change every second row  of the tracks table to light gray ~ 
+             code taken from - http://stackoverflow.com/questions/3875607/change-the-background-color-of-a-row-in-a-jtable */
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+            {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(row % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
+                return c;
+            }
+        });
+        
         jTableTracks.getTableHeader().addMouseListener(new MouseAdapter()
         {
             @Override
@@ -582,7 +599,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             {
                 Logger.getLogger(PlaylistManagerGui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             reader.getPlaylists().remove(selectedIndex - removalCount);
             removalCount++;
         }
