@@ -11,8 +11,6 @@ import com.ku.jackpatman.playlist.sorts.TrackNameSort;
 import com.ku.jackpatman.playlist.sorts.TrackYearSort;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -36,14 +34,12 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class PlaylistManagerGui extends javax.swing.JFrame
@@ -367,18 +363,6 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     public PlaylistManagerGui()
     {
         initComponents();
-        jTableTracks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
-        {
-            /* Will change every second row  of the tracks table to light gray ~ 
-             code taken from - http://stackoverflow.com/questions/3875607/change-the-background-color-of-a-row-in-a-jtable */
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-            {
-                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                c.setBackground(row % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
-                return c;
-            }
-        });
 
         jTableTracks.getTableHeader().addMouseListener(new MouseAdapter()
         {
@@ -598,7 +582,7 @@ public class PlaylistManagerGui extends javax.swing.JFrame
             {
                 Logger.getLogger(PlaylistManagerGui.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
             reader.getPlaylists().remove(selectedIndex - removalCount);
             removalCount++;
         }
