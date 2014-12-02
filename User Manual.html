@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Bootstrap 101 Template</title>
+      <!-- Bootstrap -->
+      <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <!-- NAVBAR START --> 
+      <nav class="navbar navbar-default" role="navigation">
+         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="#">KU Playlist Manager - Quickstart Guide</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <form class="navbar-form navbar-right" role="search">
+               <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+               </div>
+               <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+         </div>
+         <!-- /.navbar-collapse -->
+         </div><!-- /.container-fluid -->
+      </nav>
+      <!-- NAVBAR END --> 
+      <div class="container">
+         <!-- Opening the program -->
+         <div class="row">
+            <div class="col-md-10">
+               <h3>Opening the playlist Manager</h3>
+               <ul class="nav nav-tabs">
+                  <div role="tabpanel">
+                     <!-- Nav tabs -->
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#openingAbout" aria-controls="OpeningAbout" role="tab" data-toggle="tab">How-to</a></li>
+                        <li role="presentation"><a href="#openingExample" aria-controls="openingExample" role="tab" data-toggle="tab">Example</a></li>
+                     </ul>
+                     <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="openingAbout">
+                           <br>
+                           <p>
+                              After downloading KUPlaylistManager.jar, simply double click on it to load the program - Note that you will need Java 1.7 installed to run the program, this can be installed 
+                              <a href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" >from the Oracle Website</a>. The program shown in the following example 
+                              should be displayed in the center of your screen. Please note you will also need the 'lib' folder distributed with the program - otherwise it will fail to run succesfully. 
+                           </p>
+                           <br>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="openingExample">
+                           <br>
+                           <p>
+                              <img src="bootstrap/manualGifs/opening.gif">
+                           </p>
+                           <br>  
+                        </div>
+                     </div>
+                  </div>
+               </ul>
+            </div>
+            <!-- Loading a Playlist/Folder -->
+            <div class="row">
+               <div class="col-md-10">
+                  <h3>Loading Playlists & Folders</h3>
+                  <ul class="nav nav-tabs">
+                     <div role="tabpanel">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                           <li role="presentation" class="active"><a href="#loadingPlaylistsAbout" aria-controls="about" role="tab" data-toggle="tab">How-to</a></li>
+                           <li role="presentation"><a href="#loadingPlaylistsExample" aria-controls="example" role="tab" data-toggle="tab">Loading Playlist Example</a></li>
+                           <li role="presentation"><a href="#removingPlaylistsExample" aria-controls="example" role="tab" data-toggle="tab">Removing Playlist Example</a></li>
+                        </ul>
+                        <div class="tab-content">
+                           <div role="tabpanel" class="tab-pane fade in active" id="loadingPlaylistsAbout">
+                              <br>
+                              <p>
+                                 The KU Playlist Manager allows you to either open up a folder containing .mp3 files, or to select an existing .m3u playlist file for loading, this can be 
+                                 done by selecting the "File" option on the toolbar at the top right of the program, and then selecting "Load Playlist". Alternatively for quick access, this
+                                 can be done by clicking on the Black Record located in the bottom left or via the key combinationg <span class="label label-primary">Ctrl+P</span>. Upon doing this, you will be presented with a file
+                                 explorer - where you may select multiple mp3's and/or playlists to load. To select multiple, you may use the key combination <span class="label label-primary">Ctrl+LMB</span>. Once selected press "Open", and the program will display the playlists in the left hand column. Following this, you may then opt to remove playlists by selecting one or multiple in the left hand pane, to select multiple playlists, again you may use <span class="label label-primary">Ctrl+LMB</span>.You may then either select File > Remove Folder/Playlists from the toolbar, or press the red record button in the left hand corner. Alternatively you may use the key combination <span class="label label-primary">Shift+P</span>.
+                              <div class="alert alert-success" role="alert"><b><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> KU Playlist Manager keeps track of your actively loaded tracks & playlists. When restarting the program - it will load your last session</b></div>
+                              <div class="alert alert-success" role="alert"><b><span class="glyphicon glyphicon-music" aria-hidden="true"></span> You can select a folder containing any mix of MP3 files, Playlists, and Subfolders to load at the same time.</b></div>
+                              </p><br>
+                           </div>
+                           <div role="tabpanel" class="tab-pane fade" id="loadingPlaylistsExample">
+                              <br>
+                              <p>
+                                 <img src="bootstrap/manualGifs/loadingPlaylist.gif">
+                              </p>
+                              <br>  
+                           </div>
+                           <div role="tabpanel" class="tab-pane fade" id="removingPlaylistsExample">
+                              <br>
+                              <p>
+                                 <img src="bootstrap/manualGifs/removingPlaylist.gif">
+                              </p>
+                              <br>  
+                           </div>
+                        </div>
+                     </div>
+                  </ul>
+               </div>
+               <hr>
+            </div>
+         </div>
+         <!-- Loading a Playlist/Folder -->
+         <div class="row">
+            <div class="col-md-10">
+               <h3>Browsing & Managing Playlist</h3>
+               <ul class="nav nav-tabs">
+                  <div role="tabpanel">
+                     <!-- Nav tabs -->
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#managingTracksAbout" aria-controls="about" role="tab" data-toggle="tab">How-to</a></li>
+                        <li role="presentation"><a href="#addingTrackExample" aria-controls="example" role="tab" data-toggle="tab">Adding Track Example</a></li>
+                        <li role="presentation"><a href="#RemovingTrackExample" aria-controls="example" role="tab" data-toggle="tab">Removing Track Example</a></li>
+                        <li role="presentation"><a href="#RefreshingTracksExample" aria-controls="example" role="tab" data-toggle="tab">Manually Adding Track</a></li>
+                     </ul>
+                     <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="managingTracksAbout">
+                           <br>
+                           <p>
+                              Once opened, the KU Playlist Manager allows you access to some basic operations to manage songs in your playlist in the form of adding and removing tracks.
+                              Tracks can be added four ways - by selecting Track > Add Tracks from the toolbar, via selecting the black ringed music icon at the bottom, via the key combination <span class="label label-primary">Ctrl+T</span>
+                              or by manually adding them to the playlist file or folder in question and selecting clicking the refresh icon in the bottom right. Inversely, tracks may be removed by selecting Track > Remove Tracks from the 
+                              toolbar, via the red ringed music icon at the bottom, via the key combination <span class="label label-primary">Shift+T</span> or by manually removing them then refreshing the manager.
+                           </p>
+                           <br>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="addingTrackExample">
+                           <br>
+                           <p>
+                              <img src="bootstrap/manualGifs/loadingPlaylist.gif">
+                           </p>
+                           <br>  
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="RemovingTrackExample">
+                           <br>
+                           <p>
+                              <img src="bootstrap/manualGifs/loadingPlaylist.gif">
+                           </p>
+                           <br>  
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="RefreshingTracksExample">
+                           <br>
+                           <p>
+                              <img src="bootstrap/manualGifs/loadingPlaylist.gif">
+                           </p>
+                           <br>  
+                        </div>
+                     </div>
+                  </div>
+               </ul>
+            </div>
+            <hr>
+         </div>
+      </div>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="bootstrap/js/bootstrap.min.js"></script>
+      <script src="bootstrap/js/tab.js"></script>    
+   </body>
+</html>

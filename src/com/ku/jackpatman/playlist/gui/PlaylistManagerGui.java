@@ -719,9 +719,9 @@ public class PlaylistManagerGui extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jButton1ActionPerformed
         int playlist = jListPlaylists.getSelectedIndex();
         String path = reader.getPlaylists().get(playlist).getPlaylistPath();
-
-        BtnMenuRemovePlaylistActionPerformed(evt);
         reader.LoadPlaylist(path);
+        BtnMenuRemovePlaylistActionPerformed(evt);
+
         UpdateTable(playlist);
     }//GEN-LAST:event_jButton1ActionPerformed
 
