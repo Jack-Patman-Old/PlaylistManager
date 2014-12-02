@@ -148,27 +148,27 @@ public class Playlist
         {
             Map<MetadataType, String> metadata = track.getTrackMetadata();
 
-            if (metadata.get(MetadataType.ALBUM) != null && metadata.get(MetadataType.ALBUM).contains(searchValue))
+            if (metadata.get(MetadataType.ALBUM) != null && metadata.get(MetadataType.ALBUM).toLowerCase().contains(searchValue))
             {
                 matches.add(track);
                 continue;
             }
-            if (metadata.get(MetadataType.ARTIST) != null && metadata.get(MetadataType.ARTIST).contains(searchValue))
+            if (metadata.get(MetadataType.ARTIST) != null && metadata.get(MetadataType.ARTIST).toLowerCase().contains(searchValue))
             {
                 matches.add(track);
                 continue;
             }
-            if (metadata.get(MetadataType.TITLE) != null && metadata.get(MetadataType.TITLE).contains(searchValue))
+            if (metadata.get(MetadataType.TITLE) != null && metadata.get(MetadataType.TITLE).toLowerCase().contains(searchValue))
             {
                 matches.add(track);
                 continue;
             }
-            if (metadata.get(MetadataType.GENRE) != null && metadata.get(MetadataType.GENRE).contains(searchValue))
+            if (metadata.get(MetadataType.GENRE) != null && metadata.get(MetadataType.GENRE).toLowerCase().contains(searchValue))
             {
                 matches.add(track);
                 continue;
             }
-            if (metadata.get(MetadataType.YEAR) != null && metadata.get(MetadataType.YEAR).contains(searchValue))
+            if (metadata.get(MetadataType.YEAR) != null && metadata.get(MetadataType.YEAR).toLowerCase().contains(searchValue))
             {
                 matches.add(track);
             }
